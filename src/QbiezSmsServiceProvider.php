@@ -9,18 +9,15 @@ class QbiezSmsServiceProvider extends ServiceProvider implements DeferrableProvi
 {
     public function register()
     {
-        // Merge config
-        $this->mergeConfigFrom(
-            $this->getConfigPath(),
-            'qsms'
-        );
+        // Merge package config with app config
+        $this->mergeConfigFrom(__DIR__ . '/../config/qsms.php', 'qsms');
 
         // Bind the service
         $this->app->singleton('qsms', function ($app) {
             return new SendSMS();
         });
 
-        // Alias the Facade
+        // Register Facade alias if it does not exist
         if (!class_exists('Qsms')) {
             class_alias(Facades\Qsms::class, 'Qsms');
         }
@@ -29,23 +26,17 @@ class QbiezSmsServiceProvider extends ServiceProvider implements DeferrableProvi
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-            $this->offerPublishing();
+            $this->publishes([
+                __DIR__ . '/../config/qsms.php' => config_path('qsms.php'),
+            ], 'qsms-config');
+
+            $this->publishes([
+                __DIR__ . '/../config/qsms.php' => config_path('qsms.php'),
+            ], 'config');
+
             $this->registerCommands();
         }
     }
-
-    protected function offerPublishing()
-    {
-        $this->publishes([
-            $this->getConfigPath() => config_path('qsms.php'),
-        ], ['qsms-config', 'config']);
-    }
-
-    protected function getConfigPath()
-    {
-        return dirname(__DIR__) . '/config/qsms.php';
-    }
-
 
     protected function registerCommands()
     {

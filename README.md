@@ -15,16 +15,17 @@ A modern SMS integration package for Laravel applications with comprehensive fea
 
 ## 🚀 Quick Start
 
-### Installation
+### Registration
+First, register for a free account at [https://sms.qbiez.com/register](https://sms.qbiez.com/register) to obtain your API token and sender ID.
 
+### Installation Steps
+
+1. Install the package via Composer:
 ```bash
 composer require qsms/qbiez-sms
 ```
 
-### Basic Configuration
-
-Add to your `.env` file:
-
+2. Add the following variables to your `.env` file:
 ```env
 QSMS_API_TOKEN=your_api_token_here
 QSMS_SENDER_ID=your_sender_id_here
@@ -48,8 +49,12 @@ $response = $sms->send('255755270046', 'Hello World!');
 
 ## ⚙️ Advanced Configuration
 
+To use advanced configuration options, follow these steps:
+
+1. Create a new file `config/qsms.php` in your Laravel project
+2. Copy the following configuration:
+
 ```php
-// config/qsms.php
 return [
     'api_token' => env('QSMS_API_TOKEN', ''),
     'sender_id' => env('QSMS_SENDER_ID', ''),
@@ -71,6 +76,11 @@ return [
         'level' => env('QSMS_LOG_LEVEL', 'info'),
     ],
 ];
+```
+
+3. Optionally, publish the configuration file (if you want to customize it further):
+```bash
+php artisan vendor:publish --tag=qsms-config
 ```
 
 ## 📱 Features

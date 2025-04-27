@@ -1,0 +1,24 @@
+{
+    "name": "qsms/qbiez-sms",
+    "description": "Laravel SMS package with file logging",
+    "require": {
+        "php": "^8.0",
+        "guzzlehttp/guzzle": "^7.0",
+        "illuminate/support": "^9.0|^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Qsms\\QbiezSms\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Qsms\\QbiezSms\\QbiezSmsServiceProvider"
+            ],
+            "aliases": {
+                "Qsms": "Qsms\\QbiezSms\\Facades\\Qsms"
+            }
+        }
+    }
+}

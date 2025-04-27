@@ -1,0 +1,52 @@
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-*
+
+# Dependency directories
+vendor/
+node_modules/
+
+# Composer files
+composer.lock
+composer.phar
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Build and cache files
+build/
+.phpunit.result.cache
+coverage/
+*.cache
+
+# Local development files
+.DS_Store
+Thumbs.db
+
+# Test artifacts
+tests/_output/
+tests/_support/_generated/
+
+# Laravel specific
+bootstrap/cache/*
+storage/*.key
+storage/framework/*
+!storage/framework/.gitkeep
+
+# OS generated files
+ehthumbs.db
+[Tt]humbs.db
+
+# Debug logs
+*.log
+*.log.*
+!qsms.log.example
+
+# Local configuration overrides
+.phpunit.local.yml
+phpunit.xml

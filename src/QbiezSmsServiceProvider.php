@@ -9,13 +9,11 @@ class QbiezSmsServiceProvider extends ServiceProvider implements DeferrableProvi
 {
     public function register()
     {
-        $configPath = __DIR__ . '/../config/qsms.php'; // Fixed path
-
-        if (file_exists($configPath)) {
-            $this->mergeConfigFrom($configPath, 'qsms');
-        } else {
-            $this->app['log']->warning('Qbiez SMS config file not found at: ' . $configPath);
-        }
+        // First try published config, then package default
+        $this->mergeConfigFrom(
+            $this->getConfigPath(),
+            'qsms'
+        );
 
         $this->app->singleton('qsms', function ($app) {
             return new SendSMS();
@@ -29,23 +27,33 @@ class QbiezSmsServiceProvider extends ServiceProvider implements DeferrableProvi
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-            $this->publishConfig();
+            $this->offerPublishing();
             $this->registerCommands();
         }
     }
 
-    protected function publishConfig()
+    protected function offerPublishing()
     {
-        $configPath = __DIR__ . '/../config/qsms.php'; // Fixed path
+        // Only offer to publish if config doesn't exist
+        if (!file_exists(config_path('qsms.php'))) {
+            $this->publishes([
+                $this->getConfigPath() => config_path('qsms.php'),
+            ], ['qsms-config', 'config']);
+        }
+    }
 
-        $this->publishes([
-            $configPath => config_path('qsms.php'),
-        ], ['qsms-config', 'config']);
+    protected function getConfigPath()
+    {
+        // Check both possible locations
+        $localConfig = __DIR__ . '/../../config/qsms.php';
+        $packageConfig = __DIR__ . '/../config/qsms.php';
+
+        return file_exists($localConfig) ? $localConfig : $packageConfig;
     }
 
     protected function registerCommands()
     {
-        if (class_exists(Console\CleanLogsCommand::class)) { // Added namespace
+        if (class_exists(Console\CleanLogsCommand::class)) {
             $this->commands([
                 Console\CleanLogsCommand::class
             ]);

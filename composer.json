@@ -9,9 +9,15 @@
         "qbiez",
         "notification",
         "api",
-        "messaging"
+        "messaging",
+        "gateway"
     ],
     "homepage": "https://github.com/qsms/qbiez-sms",
+    "support": {
+        "email": "support@qbiez.com",
+        "issues": "https://github.com/qsms/qbiez-sms/issues",
+        "docs": "https://docs.qbiez.com/sms-package"
+    },
     "authors": [
         {
             "name": "Ino Moses",
@@ -25,17 +31,23 @@
         "laravel/framework": "^9.0|^10.0|^11.0|^12.0",
         "guzzlehttp/guzzle": "^7.0",
         "ext-json": "*",
-        "illuminate/support": "^9.0|^10.0|^11.0|^12.0"
+        "illuminate/support": "^9.0|^10.0|^11.0|^12.0",
+        "illuminate/console": "^9.0|^10.0|^11.0|^12.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.0",
+        "phpunit/phpunit": "^9.5",
         "orchestra/testbench": "^7.0|^8.0",
-        "mockery/mockery": "^1.4"
+        "mockery/mockery": "^1.5",
+        "laravel/pint": "^1.0",
+        "friendsofphp/php-cs-fixer": "^3.8"
     },
     "autoload": {
         "psr-4": {
             "Qsms\\QbiezSms\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -56,26 +68,36 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "test": "phpunit",
+        "test-coverage": "phpunit --coverage-html coverage",
+        "cs-check": "php-cs-fixer fix --dry-run --diff",
+        "cs-fix": "php-cs-fixer fix",
+        "pint": "pint",
+        "analyse": "phpstan analyse",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@composer dump-autoload"
+            "@composer dump-autoload",
+            "@composer cs-fix"
         ]
     },
     "scripts-descriptions": {
-        "test": "Run unit tests",
-        "test-coverage": "Generate test coverage report"
+        "test": "Run PHPUnit tests",
+        "test-coverage": "Generate code coverage report",
+        "cs-check": "Check coding style without fixing",
+        "cs-fix": "Automatically fix coding style issues",
+        "pint": "Run Laravel Pint code style fixer",
+        "analyse": "Run static analysis with PHPStan"
     },
     "config": {
         "sort-packages": true,
         "preferred-install": "dist",
         "optimize-autoloader": true,
         "allow-plugins": {
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "minimum-stability": "stable",
@@ -86,7 +108,9 @@
             "/.github",
             "/.gitignore",
             "/phpunit.xml",
-            "/.editorconfig"
+            "/.editorconfig",
+            "/.php-cs-fixer.cache",
+            "*.md"
         ]
     }
 }

@@ -8,15 +8,20 @@ class QbiezSmsServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        // Merges the package config with the app's config
-        $this->mergeConfigFrom(__DIR__ . '/../config/qsms.php', 'qsms');
+        $this->mergeConfigFrom(
+            __DIR__ . '/../../config/qsms.php',
+            'qsms'
+        );
+
+        $this->app->singleton('qsms', function ($app) {
+            return new SendSMS();
+        });
     }
 
     public function boot()
     {
-        // Publishes the config file to the app's config directory
         $this->publishes([
-            __DIR__ . '/../config/qsms.php' => config_path('qsms.php'),
+            __DIR__ . '/../../config/qsms.php' => config_path('qsms.php'),
         ], 'qsms-config');
     }
 }

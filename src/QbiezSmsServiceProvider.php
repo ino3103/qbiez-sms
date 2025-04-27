@@ -9,16 +9,18 @@ class QbiezSmsServiceProvider extends ServiceProvider implements DeferrableProvi
 {
     public function register()
     {
-        // First try published config, then package default
+        // Merge config
         $this->mergeConfigFrom(
             $this->getConfigPath(),
             'qsms'
         );
 
+        // Bind the service
         $this->app->singleton('qsms', function ($app) {
             return new SendSMS();
         });
 
+        // Alias the Facade
         if (!class_exists('Qsms')) {
             class_alias(Facades\Qsms::class, 'Qsms');
         }
@@ -34,12 +36,9 @@ class QbiezSmsServiceProvider extends ServiceProvider implements DeferrableProvi
 
     protected function offerPublishing()
     {
-        // Only offer to publish if config doesn't exist
-        if (!file_exists(config_path('qsms.php'))) {
-            $this->publishes([
-                $this->getConfigPath() => config_path('qsms.php'),
-            ], ['qsms-config', 'config']);
-        }
+        $this->publishes([
+            $this->getConfigPath() => config_path('qsms.php'),
+        ], ['qsms-config', 'config']);
     }
 
     protected function getConfigPath()

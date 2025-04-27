@@ -8,8 +8,10 @@
         "sms",
         "qbiez",
         "notification",
-        "api"
+        "api",
+        "messaging"
     ],
+    "homepage": "https://github.com/qsms/qbiez-sms",
     "authors": [
         {
             "name": "Ino Moses",
@@ -22,11 +24,13 @@
         "php": "^8.1",
         "laravel/framework": "^9.0|^10.0|^11.0|^12.0",
         "guzzlehttp/guzzle": "^7.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "illuminate/support": "^9.0|^10.0|^11.0|^12.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
-        "orchestra/testbench": "^7.0|^8.0"
+        "orchestra/testbench": "^7.0|^8.0",
+        "mockery/mockery": "^1.4"
     },
     "autoload": {
         "psr-4": {
@@ -46,17 +50,43 @@
             "aliases": {
                 "Qsms": "Qsms\\QbiezSms\\Facades\\Qsms"
             }
+        },
+        "branch-alias": {
+            "dev-main": "2.x-dev"
         }
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@composer dump-autoload"
+        ]
+    },
+    "scripts-descriptions": {
+        "test": "Run unit tests",
+        "test-coverage": "Generate test coverage report"
     },
     "config": {
         "sort-packages": true,
         "preferred-install": "dist",
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "archive": {
+        "exclude": [
+            "/tests",
+            "/.github",
+            "/.gitignore",
+            "/phpunit.xml",
+            "/.editorconfig"
+        ]
+    }
 }

@@ -6,22 +6,28 @@ use Illuminate\Support\ServiceProvider;
 
 class QbiezSmsServiceProvider extends ServiceProvider
 {
+    /**
+     * Register services.
+     */
     public function register()
     {
+        // Automatically merge package config
         $this->mergeConfigFrom(
-            __DIR__ . '/../../config/qsms.php',
+            __DIR__ . '/../config/qsms.php',
             'qsms'
         );
-
-        $this->app->singleton('qsms', function ($app) {
-            return new SendSMS();
-        });
     }
 
+    /**
+     * Bootstrap services.
+     */
     public function boot()
     {
-        $this->publishes([
-            __DIR__ . '/../../config/qsms.php' => config_path('qsms.php'),
-        ], 'qsms-config');
+        // Publish config file
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../config/qsms.php' => config_path('qsms.php'),
+            ], 'qsms-config');
+        }
     }
 }

@@ -43,12 +43,9 @@ class QbiezSmsServiceProvider extends ServiceProvider implements DeferrableProvi
 
     protected function getConfigPath()
     {
-        // Check both possible locations
-        $localConfig = __DIR__ . '/../../config/qsms.php';
-        $packageConfig = __DIR__ . '/../config/qsms.php';
-
-        return file_exists($localConfig) ? $localConfig : $packageConfig;
+        return dirname(__DIR__) . '/config/qsms.php';
     }
+
 
     protected function registerCommands()
     {

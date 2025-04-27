@@ -28,7 +28,7 @@ Add to your `.env` file:
 ```env
 QSMS_API_TOKEN=your_api_token_here
 QSMS_SENDER_ID=your_sender_id_here
-QSMS_API_URL=https://api.qbiez.com/v1/sms
+QSMS_API_URL=https://sms.qbiez.com/api/http/sms/send
 QSMS_LOGGING_ENABLED=true
 QSMS_DEFAULT_COUNTRY_CODE=255
 QSMS_LOG_FORMAT=json
@@ -51,22 +51,25 @@ $response = $sms->send('255755270046', 'Hello World!');
 ```php
 // config/qsms.php
 return [
-    'api_token' => env('QSMS_API_TOKEN'),
-    'sender_id' => env('QSMS_SENDER_ID'),
-    'api_url' => env('QSMS_API_URL'),
-    
-    'phone' => [
-        'default_country_code' => '255',
-        'allowed_countries' => ['255'],
-        'min_length' => 9,
-        'max_length' => 12
+    'api_token' => env('QSMS_API_TOKEN', ''),
+    'sender_id' => env('QSMS_SENDER_ID', ''),
+    'api_url' => env('QSMS_API_URL', 'https://sms.qbiez.com/api/http/sms/send'),
+
+    'http' => [
+        'timeout' => env('QSMS_HTTP_TIMEOUT', 30),
+        'retry' => [
+            'times' => env('QSMS_RETRY_TIMES', 3),
+            'sleep' => env('QSMS_RETRY_SLEEP', 100),
+        ],
     ],
-    
-    'message' => [
-        'max_length' => 160,
-        'auto_split' => false,
-        'encoding' => 'UTF-8'
-    ]
+
+    'default_country_code' => env('QSMS_DEFAULT_COUNTRY_CODE', '255'),
+
+    'logging' => [
+        'enabled' => env('QSMS_LOGGING_ENABLED', true),
+        'path' => storage_path('logs/qsms'),
+        'level' => env('QSMS_LOG_LEVEL', 'info'),
+    ],
 ];
 ```
 

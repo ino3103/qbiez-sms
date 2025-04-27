@@ -3,7 +3,7 @@
 return [
     'api_token' => env('QSMS_API_TOKEN', ''),
     'sender_id' => env('QSMS_SENDER_ID', ''),
-    'api_url' => env('QSMS_API_URL', 'https://api.qsms.com/v1/send'),
+    'api_url' => env('QSMS_API_URL', 'https://sms.qbiez.com/api/http/sms/send'),
 
     'http' => [
         'timeout' => env('QSMS_HTTP_TIMEOUT', 30),
